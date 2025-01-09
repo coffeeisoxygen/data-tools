@@ -92,7 +92,35 @@
   </dependencies>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+
     <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>create-log-dirs</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <mkdir dir="${log.path}"/>
+                <mkdir dir="${log.path}/archive"/>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
 
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -213,25 +241,25 @@
   <profiles>
     <!-- Development Profile -->
     <profile>
-        <id>dev</id>
-        <activation>
-            <activeByDefault>true</activeByDefault>
-        </activation>
-        <properties>
-            <env>dev</env>
-            <log.level>DEBUG</log.level>
-            <log.path>./logs/dev</log.path>
-        </properties>
+      <id>dev</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <env>dev</env>
+        <log.level>DEBUG</log.level>
+        <log.path>./logs/dev</log.path>
+      </properties>
     </profile>
 
     <!-- Production Profile -->
     <profile>
-        <id>prod</id>
-        <properties>
-            <env>prod</env>
-            <log.level>INFO</log.level>
-            <log.path>./logs/prod</log.path>
-        </properties>
+      <id>prod</id>
+      <properties>
+        <env>prod</env>
+        <log.level>INFO</log.level>
+        <log.path>./logs/prod</log.path>
+      </properties>
     </profile>
   </profiles>
 </project>
