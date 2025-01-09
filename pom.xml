@@ -209,4 +209,29 @@
 
     </plugins>
   </build>
+
+  <profiles>
+    <!-- Development Profile -->
+    <profile>
+        <id>dev</id>
+        <activation>
+            <activeByDefault>true</activeByDefault>
+        </activation>
+        <properties>
+            <env>dev</env>
+            <log.level>DEBUG</log.level>
+            <log.path>./logs/dev</log.path>
+        </properties>
+    </profile>
+
+    <!-- Production Profile -->
+    <profile>
+        <id>prod</id>
+        <properties>
+            <env>prod</env>
+            <log.level>INFO</log.level>
+            <log.path>./logs/prod</log.path>
+        </properties>
+    </profile>
+  </profiles>
 </project>

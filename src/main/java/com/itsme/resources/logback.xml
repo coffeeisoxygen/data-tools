@@ -3,9 +3,9 @@
     <!-- Properties -->
     <property name="LOG_PATH" value="./logs"/>
     <property name="LOG_ARCHIVE" value="${LOG_PATH}/archive"/>
-    <!-- Pattern Layout -->
-    <property name="PATTERN_CONSOLE" value="%d{HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{36}) - %msg%n"/>
-    <property name="PATTERN_FILE" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+    <!-- Enhanced Pattern Layout -->
+    <property name="PATTERN_CONSOLE" value="%d{HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{36}) %X{requestId} - %msg%n"/>
+    <property name="PATTERN_FILE" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} %X{requestId} - %msg%n"/>
     <!-- Console Appender -->
     <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -25,11 +25,29 @@
             <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
     </appender>
-    <!-- Async Appender -->
+    <!-- Error Log -->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/error.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+            <pattern>${PATTERN_FILE}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_ARCHIVE}/error-%d{yyyy-MM-dd}-%i.log.gz</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>500MB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+    <!-- Optimized Async Settings -->
     <appender name="Async" class="ch.qos.logback.classic.AsyncAppender">
         <appender-ref ref="RollingFile"/>
-        <queueSize>512</queueSize>
+        <queueSize>1024</queueSize>
         <discardingThreshold>0</discardingThreshold>
+        <includeCallerData>false</includeCallerData>
+        <neverBlock>true</neverBlock>
     </appender>
     <!-- Logger Configurations -->
     <logger name="com.itsme" level="INFO"/>
@@ -38,4 +56,20 @@
         <appender-ref ref="Console"/>
         <appender-ref ref="Async"/>
     </root>
+    <!-- Development Profile -->
+    <springProfile name="dev">
+        <root level="DEBUG">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="Async"/>
+            <appender-ref ref="ERROR_FILE"/>
+        </root>
+    </springProfile>
+    <!-- Production Profile -->
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="Async"/>
+            <appender-ref ref="ERROR_FILE"/>
+        </root>
+    </springProfile>
 </configuration>
