@@ -19,6 +19,7 @@
     <log.base>${project.basedir}/runtime/logs</log.base>
     <log.path>${log.base}/${env}</log.path>
     <log.archive>${log.path}/archive</log.archive>
+    <log.level>${log.level:-INFO}</log.level>
   </properties>
 
   <dependencyManagement>
@@ -244,7 +245,6 @@
   </build>
 
   <profiles>
-    <!-- Development Profile -->
     <profile>
       <id>dev</id>
       <activation>
@@ -253,17 +253,14 @@
       <properties>
         <env>dev</env>
         <log.level>DEBUG</log.level>
-        <log.path>${project.build.directory}/logs/dev</log.path>
       </properties>
     </profile>
 
-    <!-- Production Profile -->
     <profile>
       <id>prod</id>
       <properties>
         <env>prod</env>
         <log.level>INFO</log.level>
-        <log.path>${project.build.directory}/logs/prod</log.path>
       </properties>
     </profile>
   </profiles>

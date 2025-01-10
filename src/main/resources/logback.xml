@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="30 seconds">
     <!-- Properties -->
-    <property name="LOG_PATH" value="${log.path}"/>
-    <property name="LOG_ARCHIVE" value="${log.archive}"/>
+    <property name="LOG_PATH" value="${log.path:-${user.dir}/logs}"/>
+    <property name="LOG_ARCHIVE" value="${log.archive:-${LOG_PATH}/archive}"/>
+    <property name="LOG_LEVEL" value="${log.level:-INFO}"/>
     <!-- Enhanced Pattern Layout -->
     <property name="PATTERN_CONSOLE" value="%d{HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{36}) %X{requestId} - %msg%n"/>
     <property name="PATTERN_FILE" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} %X{requestId} - %msg%n"/>
@@ -52,8 +53,9 @@
     <!-- Logger Configurations -->
     <logger name="com.itsme" level="INFO"/>
     <!-- Root Logger -->
-    <root level="INFO">
+    <root level="${LOG_LEVEL}">
         <appender-ref ref="Console"/>
         <appender-ref ref="Async"/>
+        <appender-ref ref="ERROR_FILE"/>
     </root>
 </configuration>
