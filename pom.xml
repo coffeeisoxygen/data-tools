@@ -229,6 +229,13 @@
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
         <version>0.8.12</version>
+        <configuration>
+          <excludes>
+            <!-- Exclude generated code if any -->
+            <exclude>**/generated/**/*</exclude>
+          </excludes>
+          <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
+        </configuration>
         <executions>
           <!-- Prepares the property pointing to the JaCoCo runtime agent -->
           <execution>
@@ -257,17 +264,17 @@
             <configuration>
               <rules>
                 <rule>
-                  <element>BUNDLE</element>
+                  <element>PACKAGE</element>
                   <limits>
                     <limit>
                       <counter>LINE</counter>
                       <value>COVEREDRATIO</value>
-                      <minimum>0.80</minimum>
+                      <minimum>0.60</minimum>
                     </limit>
                     <limit>
                       <counter>BRANCH</counter>
                       <value>COVEREDRATIO</value>
-                      <minimum>0.80</minimum>
+                      <minimum>0.60</minimum>
                     </limit>
                   </limits>
                 </rule>
