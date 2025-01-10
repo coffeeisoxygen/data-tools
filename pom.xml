@@ -20,6 +20,7 @@
     <log.path>${log.base}/${env}</log.path>
     <log.archive>${log.path}/archive</log.archive>
     <log.level>${log.level:-INFO}</log.level>
+    <main.class>com.itsme.App</main.class>
   </properties>
 
   <dependencyManagement>
@@ -180,6 +181,11 @@
           <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
           </descriptorRefs>
+          <archive>
+            <manifest>
+              <mainClass>${main.class}</mainClass>
+            </manifest>
+          </archive>
         </configuration>
         <executions>
           <execution>
