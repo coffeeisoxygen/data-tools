@@ -15,6 +15,10 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>23</java.version>
+    <!-- Log paths outside target directory -->
+    <log.base>${project.basedir}/runtime/logs</log.base>
+    <log.path>${log.base}/${env}</log.path>
+    <log.archive>${log.path}/archive</log.archive>
   </properties>
 
   <dependencyManagement>
@@ -107,6 +111,7 @@
         <version>3.1.0</version>
         <executions>
           <execution>
+            <?m2e execute onConfiguration,onIncremental?>
             <id>create-log-dirs</id>
             <phase>process-resources</phase>
             <goals>
@@ -115,7 +120,7 @@
             <configuration>
               <target>
                 <mkdir dir="${log.path}"/>
-                <mkdir dir="${log.path}/archive"/>
+                <mkdir dir="${log.archive}"/>
               </target>
             </configuration>
           </execution>
@@ -248,7 +253,7 @@
       <properties>
         <env>dev</env>
         <log.level>DEBUG</log.level>
-        <log.path>./logs/dev</log.path>
+        <log.path>${project.build.directory}/logs/dev</log.path>
       </properties>
     </profile>
 
@@ -258,7 +263,7 @@
       <properties>
         <env>prod</env>
         <log.level>INFO</log.level>
-        <log.path>./logs/prod</log.path>
+        <log.path>${project.build.directory}/logs/prod</log.path>
       </properties>
     </profile>
   </profiles>
